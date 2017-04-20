@@ -1,75 +1,49 @@
 #pragma once
 
 #include "Button.hpp"
-#include "Enums.hpp"
 #include "Event.hpp"
-#include "Grid.hpp"
 #include "RenderController.hpp"
-#include "Tetromino.hpp"
+#include "Slider.hpp"
+#include <vector>
 
 class Engine {
 public:
-	using ButtonMap = std::map<std::string, Button>;
-
 	Engine();
 
 	// Main game loop
 	void run();
 
-	template <gameState s>
-	void loop() {
-		Event event;
-		while (event.poll())
-			input<s>(event);
-		step<s>();
-		draw<s>();
-	}
-
 	// All input handling function
-	template <gameState>
-	void input(const Event& event) {}
-	template <> void input<gameState::intro>(const Event& event);
-	template <> void input<gameState::menu>(const Event& event);
-	template <> void input<gameState::play>(const Event& event);
-	template <> void input<gameState::gameover>(const Event& event);
+	void input(const Event& event);
 
-	// Game logic
-	template <gameState>
-	void step() {}
-	template <> void step<gameState::play>();
+	// Logic
+	void step();
 
-	// Game rendering
-	template <gameState>
-	void draw() {}
-	template <> void draw<gameState::intro>();
-	template <> void draw<gameState::menu>();
-	template <> void draw<gameState::play>();
-	template <> void draw<gameState::gameover>();
+	// Rendering
+	void draw();
 
 private:
 	// Button functions
-	void bNewGame();
-	void bContinue();
-	void bQuit();
+	void bIncR();
+	void bDecR();
+	void bIncG();
+	void bDecG();
+	void bIncB();
+	void bDecB();
 
-	void addButton(std::string name,
-	               Position pos,
-	               unsigned width,
-	               unsigned height,
-	               void (Engine::* function)(),
-	               int shortcut,
-	               const std::string& font,
-	               const std::string& sprite);
+	void bIncH();
+	void bDecH();
+	void bIncS();
+	void bDecS();
+	void bIncV();
+	void bDecV();
 
-	gameState state = gameState::intro;
 	RenderController renderer;
+	std::vector<Button> buttons;
+	std::vector<Slider<Uint8>> sliders8;
+	std::vector<Slider<Uint16>> sliders16;
+	bool running;
 
-	Grid grid; // holds all the information about playing grid
-	Tetromino tetromino; // holds all the information about tetronimos
-
-	ButtonMap buttons;
-
-	unsigned score = 0;
-	unsigned lastScored = 0;
-	unsigned multiplier = 0;
+	Color leftColor;
+	Color rightColor;
 };

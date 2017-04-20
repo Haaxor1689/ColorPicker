@@ -34,7 +34,7 @@ public:
 	 * \return If event type is KeyDown/Up, returns keyboard key, or if event type is MouseButtonUp/Down returns mouse key.
 	 */
 	int getKey() const {
-		switch(type) {
+		switch (type) {
 		case eventType::KeyDown:
 		case eventType::KeyUp:
 			return event.key.keysym.sym;
@@ -77,7 +77,15 @@ public:
 		default:
 			throw std::logic_error("No position for " + toString(type) + " event.");
 		}
-		
+	}
+
+	Position getMotion() const {
+		switch (type) {
+		case eventType::MouseMotion:
+			return { event.motion.xrel, event.motion.yrel };
+		default:
+			throw std::logic_error("No motion for " + toString(type) + " event.");
+		}
 	}
 
 private:

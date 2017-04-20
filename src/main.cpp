@@ -1,7 +1,8 @@
 #include "Engine.hpp"
 #include <fstream>
+#include <iostream>
 
-int main(int, char* []) {
+int main(int, char*[]) {
 	try {
 		// SDL Initialization
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0)
