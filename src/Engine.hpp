@@ -46,4 +46,6 @@ private:
 
 	Color leftColor;
 	Color rightColor;
+	Uint16 h;
+	Uint8 s, v;
 };

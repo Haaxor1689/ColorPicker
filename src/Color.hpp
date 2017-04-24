@@ -8,7 +8,7 @@ public:
 	Color() = default;
 
 	Color(colorModel model, Uint16 c1, Uint8 c2, Uint8 c3, Uint8 alpha = 255)
-		: alpha(alpha) {
+		: a(alpha) {
 		switch (model) {
 		case colorModel::RGB:
 			r = static_cast<Uint8>(c1);
@@ -25,6 +25,14 @@ public:
 		}
 	}
 
+	friend bool operator==(const Color& lhs, const Color& rhs) {
+		return lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b && lhs.a == rhs.a;
+	}
+
+	friend bool operator!=(const Color& lhs, const Color& rhs) {
+		return !(lhs == rhs);
+	}
+
 	Uint8 r = 0;
 	Uint8 g = 0;
 	Uint8 b = 0;
@@ -32,7 +40,7 @@ public:
 	Uint8 s = 0;
 	Uint8 v = 0;
 
-	Uint8 alpha = 255;
+	Uint8 a = 255;
 
 private:
 	void toHSV() {

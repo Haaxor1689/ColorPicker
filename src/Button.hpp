@@ -35,13 +35,11 @@ public:
 		if (fill)
 			renderer.drawRectangle(fill.value(), bBox);
 
-		try {
+		if (sprite)
 			renderer.drawSprite(sprite.value(), bBox);
-		} catch (const std::bad_optional_access&) {}
 
-		try {
+		if (font)
 			renderer.drawText(name, font.value(), { bBox.x + bBox.w / 2, bBox.y + bBox.h / 2 }, verticalAlign::Top);
-		} catch (const std::bad_optional_access&) {}
 	}
 
 	void setBBox(const SDL_Rect& val) { bBox = val; }

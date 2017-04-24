@@ -74,6 +74,8 @@ public:
 		case eventType::MouseButtonDown:
 		case eventType::MouseButtonUp:
 			return { event.button.x, event.button.y };
+		case eventType::MouseMotion:
+			return { event.motion.x, event.motion.y };
 		default:
 			throw std::logic_error("No position for " + toString(type) + " event.");
 		}

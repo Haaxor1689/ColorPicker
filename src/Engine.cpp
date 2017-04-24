@@ -13,33 +13,35 @@ Engine::Engine() {
 	rightColor = { colorModel::RGB, static_cast<Uint8>(Random::get(0, 255)), static_cast<Uint8>(Random::get(0, 255)), static_cast<Uint8>(Random::get(0, 255)) };
 
 	// Buttons set up
-	buttons.push_back({ "+", { 300, 100 , 30, 30 }, std::bind(&Engine::bIncR, this) });
-	buttons.push_back({ "-", { 100, 100 , 30, 30 }, std::bind(&Engine::bDecR, this) });
-	buttons.push_back({ "+", { 300, 130 , 30, 30 }, std::bind(&Engine::bIncG, this) });
-	buttons.push_back({ "-", { 100, 130 , 30, 30 }, std::bind(&Engine::bDecG, this) });
-	buttons.push_back({ "+", { 300, 160 , 30, 30 }, std::bind(&Engine::bIncB, this) });
-	buttons.push_back({ "-", { 100, 160 , 30, 30 }, std::bind(&Engine::bDecB, this) });
+	buttons.emplace_back("+", SDL_Rect{ 300, 100 , 30, 30 }, std::bind(&Engine::bIncR, this));
+	buttons.emplace_back("-", SDL_Rect{ 100, 100 , 30, 30 }, std::bind(&Engine::bDecR, this));
+	buttons.emplace_back("+", SDL_Rect{ 300, 130 , 30, 30 }, std::bind(&Engine::bIncG, this));
+	buttons.emplace_back("-", SDL_Rect{ 100, 130 , 30, 30 }, std::bind(&Engine::bDecG, this));
+	buttons.emplace_back("+", SDL_Rect{ 300, 160 , 30, 30 }, std::bind(&Engine::bIncB, this));
+	buttons.emplace_back("-", SDL_Rect{ 100, 160 , 30, 30 }, std::bind(&Engine::bDecB, this));
 
-	buttons.push_back({ "+", { 600, 100 , 30, 30 }, std::bind(&Engine::bIncH, this) });
-	buttons.push_back({ "-", { 400, 100 , 30, 30 }, std::bind(&Engine::bDecH, this) });
-	buttons.push_back({ "+", { 600, 130 , 30, 30 }, std::bind(&Engine::bIncS, this) });
-	buttons.push_back({ "-", { 400, 130 , 30, 30 }, std::bind(&Engine::bDecS, this) });
-	buttons.push_back({ "+", { 600, 160 , 30, 30 }, std::bind(&Engine::bIncV, this) });
-	buttons.push_back({ "-", { 400, 160 , 30, 30 }, std::bind(&Engine::bDecV, this) });
+	buttons.emplace_back("+", SDL_Rect{ 600, 100 , 30, 30 }, std::bind(&Engine::bIncH, this));
+	buttons.emplace_back("-", SDL_Rect{ 400, 100 , 30, 30 }, std::bind(&Engine::bDecH, this));
+	buttons.emplace_back("+", SDL_Rect{ 600, 130 , 30, 30 }, std::bind(&Engine::bIncS, this));
+	buttons.emplace_back("-", SDL_Rect{ 400, 130 , 30, 30 }, std::bind(&Engine::bDecS, this));
+	buttons.emplace_back("+", SDL_Rect{ 600, 160 , 30, 30 }, std::bind(&Engine::bIncV, this));
+	buttons.emplace_back("-", SDL_Rect{ 400, 160 , 30, 30 }, std::bind(&Engine::bDecV, this));
 
 	for (auto& i : buttons) {
 		i.setFont("24Bold");
 		i.setFill({ colorModel::RGB, 51, 51, 51 });
 	}
 
-	// Sliders
-	sliders8.push_back({ { 130, 100, 170, 30 }, rightColor.r, 0, 255 });
-	sliders8.push_back({ { 130, 130, 170, 30 }, rightColor.g, 0, 255 });
-	sliders8.push_back({ { 130, 160, 170, 30 }, rightColor.b, 0, 255 });
+	sliders8.reserve(5);
 
-	sliders16.push_back({ { 430, 100, 170, 30 }, rightColor.h, 0, 360 });
-	sliders8.push_back({ { 430, 130, 170, 30 }, rightColor.s, 0, 100 });
-	sliders8.push_back({ { 430, 160, 170, 30 }, rightColor.v, 0, 100 });
+	// Sliders
+	sliders8.emplace_back(SDL_Rect{ 130, 100, 170, 30 }, rightColor.r, static_cast<Uint8>(0), static_cast<Uint8>(255));
+	sliders8.emplace_back(SDL_Rect{ 130, 130, 170, 30 }, rightColor.g, static_cast<Uint8>(0), static_cast<Uint8>(255));
+	sliders8.emplace_back(SDL_Rect{ 130, 160, 170, 30 }, rightColor.b, static_cast<Uint8>(0), static_cast<Uint8>(255));
+
+	sliders16.emplace_back(SDL_Rect{ 430, 100, 170, 30 }, rightColor.h, static_cast<Uint16>(0), static_cast<Uint16>(360));
+	sliders8.emplace_back(SDL_Rect{ 430, 130, 170, 30 }, rightColor.s, static_cast<Uint8>(0), static_cast<Uint8>(100));
+	sliders8.emplace_back(SDL_Rect{ 430, 160, 170, 30 }, rightColor.v, static_cast<Uint8>(0), static_cast<Uint8>(100));
 
 	for (auto& i : sliders8)
 		i.setFill({ colorModel::RGB, 0, 0, 0 });

@@ -12,7 +12,7 @@ public:
 		  value(value),
 		  rangeFrom(rangeFrom),
 		  rangeTo(rangeTo),
-		  handler("", { bBox.x, bBox.y, 10, bBox.h }, std::bind(&Slider::hold, this)) {
+		  handler("", { bBox.x, bBox.y, 10, bBox.h }, [this]() { held = true; }) {
 		handler.setFill({ colorModel::RGB, 51, 51, 51 });
 		alignHandler();
 	}
@@ -23,7 +23,7 @@ public:
 		switch (event.getType()) {
 		case eventType::MouseMotion:
 			if (held) {
-				handler.setBBox(handler.getBBox() + SDL_Rect{ event.getMotion().x, 0, 0, 0 });
+				handler.setBBox(SDL_Rect{ event.getPosition().x, bBox.y, 10, bBox.h });
 				if (middle(handler.getBBox()).x < bBox.x)
 					handler.setBBox({ bBox.x - 5, bBox.y, 10, bBox.h });
 				if (middle(handler.getBBox()).x > bBox.x + bBox.w)
@@ -49,8 +49,8 @@ public:
 		handler.draw(renderer);
 	}
 
-	void setValue() const {
-		value = (rangeTo - rangeFrom) * (static_cast<float>(middle(handler.getBBox()).x - bBox.x) / bBox.w) + rangeFrom;
+	void setValue() {
+		value = static_cast<T>(static_cast<float>(rangeTo - rangeFrom) * (static_cast<float>(middle(handler.getBBox()).x - bBox.x) / bBox.w) + static_cast<float>(rangeFrom));
 	}
 
 	void alignHandler() {
@@ -63,7 +63,6 @@ public:
 private:
 	void hold() {
 		held = true;
-		fill.reset();
 	}
 
 	SDL_Rect bBox;
