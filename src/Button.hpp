@@ -13,54 +13,82 @@ public:
 	Button(const std::string& text,
 	       const SDL_Rect& bBox,
 	       std::function<void()> action)
-		: name(text),
-		  bBox(bBox),
-		  action(action) {}
+		: _name(text),
+		  _bBox(bBox),
+		  _action(action) {}
 
-	void input(const Event& event) {
+	void input(const Event& event) const {
 		switch (event.getType()) {
 		case eventType::KeyDown:
-			if (shortcut && event.getKey() == shortcut)
-				action();
+			if (_shortcut && event.getKey() == _shortcut)
+				_action();
 			break;
 		case eventType::MouseButtonDown:
-			if (event.getPosition().isInside(bBox))
-				action();
+			if (event.getPosition().isInside(_bBox))
+				_action();
 			break;
 		default: break;
-		}
+		} 
 	}
 
 	void draw(RenderController& renderer) {
-		if (fill)
-			renderer.drawRectangle(fill.value(), bBox);
+		if (_fill) {
+			if (_border && _borderColor)
+				renderer.drawRectangle(_fill.value(), _bBox, _borderColor.value(), _border.value());
+			else
+				renderer.drawRectangle(_fill.value(), _bBox);
+		}
 
-		if (sprite)
-			renderer.drawSprite(sprite.value(), bBox);
+		if (_sprite)
+			renderer.drawSprite(_sprite.value(), _bBox);
 
-		if (font)
-			renderer.drawText(name, font.value(), { bBox.x + bBox.w / 2, bBox.y + bBox.h / 2 }, verticalAlign::Top);
+		if (_text && _font)
+			renderer.drawText(_text.value(), _font.value(), { _bBox.x + _bBox.w / 2, _bBox.y + _bBox.h / 2 }, verticalAlign::Top);
 	}
 
-	void setBBox(const SDL_Rect& val) { bBox = val; }
-	void setShortcut() { shortcut.reset(); }
-	void setShortcut(int val) { shortcut.emplace(val); }
-	void setFont() { font.reset(); }
-	void setFont(const std::string& val) { font.emplace(val); }
-	void setSprite() { sprite.reset(); }
-	void setSprite(const std::string& val) { sprite.emplace(val); }
-	void setFill() { fill.reset(); }
-	void setFill(const Color& val) { fill.emplace(val); }
+	const std::string& name() const { return _name; }
 
-	const SDL_Rect& getBBox() const { return bBox; }
+	const SDL_Rect& bBox() const { return _bBox; }
+	void bBox(const SDL_Rect& val) { _bBox = val; }
+
+	int shortcut() const { return _shortcut.value(); }
+	void shortcut(int val) { _shortcut.emplace(val); }
+	void removeShortcut() { _shortcut.reset(); }
+
+	const std::string& text() const { return _text.value(); }
+	void text(const std::string& val) { _text.emplace(val); }
+	void removeText() { _text.reset(); }
+
+	const std::string& font() const { return _font.value(); }
+	void font(const std::string& val) { _font.emplace(val); }
+	void removeFont() { _font.reset(); }
+
+	const std::string& sprite() const { return _sprite.value(); }
+	void sprite(const std::string& val) { _sprite.emplace(val); }
+	void removeSprite() { _sprite.reset(); }
+
+	const Color& fill() const { return _fill.value(); }
+	void fill(const Color& val) { _fill.emplace(val); }
+	void removeFill() { _fill.reset(); }
+
+	unsigned border() const { return _border.value(); }
+	void border(unsigned val) { _border.emplace(val); }
+	void removeBorder() { _border.reset(); }
+
+	const Color& borderColor() const { return _borderColor.value(); }
+	void borderColor(const Color& val) { _borderColor.emplace(val); }
+	void removeBorderColor() { _borderColor.reset(); }
 
 private:
-	std::string name;
-	SDL_Rect bBox;
-	std::function<void()> action;
+	const std::string _name;
+	SDL_Rect _bBox;
+	std::function<void()> _action;
 
-	std::optional<int> shortcut;
-	std::optional<std::string> font;
-	std::optional<std::string> sprite;
-	std::optional<Color> fill;
+	std::optional<int> _shortcut;
+	std::optional<std::string> _text;
+	std::optional<std::string> _font;
+	std::optional<std::string> _sprite;
+	std::optional<Color> _fill;
+	std::optional<unsigned> _border;
+	std::optional<Color> _borderColor;
 };

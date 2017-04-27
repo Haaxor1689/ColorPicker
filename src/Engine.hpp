@@ -1,10 +1,8 @@
 #pragma once
 
-#include "Button.hpp"
 #include "Event.hpp"
 #include "RenderController.hpp"
-#include "Slider.hpp"
-#include <vector>
+#include "ResourceMap.hpp"
 
 class Engine {
 public:
@@ -23,29 +21,18 @@ public:
 	void draw();
 
 private:
-	// Button functions
-	void bIncR();
-	void bDecR();
-	void bIncG();
-	void bDecG();
-	void bIncB();
-	void bDecB();
-
-	void bIncH();
-	void bDecH();
-	void bIncS();
-	void bDecS();
-	void bIncV();
-	void bDecV();
+	static Color randomColor();
 
 	RenderController renderer;
-	std::vector<Button> buttons;
-	std::vector<Slider<Uint8>> sliders8;
-	std::vector<Slider<Uint16>> sliders16;
+	ButtonMap buttons;
+	SliderMap<Uint8> sliders8;
+	SliderMap<Uint16> sliders16;
 	bool running;
 
-	Color leftColor;
-	Color rightColor;
+	Color lCol;
+	Color rCol;
 	Uint16 h;
 	Uint8 s, v;
+
+	bool result = false;
 };

@@ -70,6 +70,11 @@ public:
 		SDL_SetRenderDrawColor(&renderer, clearColor.r, clearColor.g, clearColor.b, 255);
 	}
 
+	void drawRectangle(Color color, const SDL_Rect& bBox, Color borderColor, int border, Uint8 alpha = 255) {
+		drawRectangle(borderColor, bBox, alpha);
+		drawRectangle(color, SDL_Rect{ bBox.x + border, bBox.y + border, bBox.w - 2 * border, bBox.h - 2 * border, }, alpha);
+	}
+
 	void addFont(std::string name, std::string path, int size, SDL_Color color = { 255, 255, 255, 255 }) {
 		fonts.insert(make_pair(name, Text(&renderer, path, size, color)));
 	}
